@@ -1,5 +1,5 @@
 def data_parse:
- [.features[].attributes] | [.[] | {dates: (.dtcreate / 1000 | strftime("%d/%m/%Y")), Total: .Alameda}];
+ [.features[].attributes] | [.[] | {dates: (.dtcreate / 1000 | strftime("%d/%m/%Y")), Total: .Oakland}];
 
 def tocsv:
   if length == 0 then empty

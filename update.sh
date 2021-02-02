@@ -5,7 +5,10 @@
 # 2. Run the Juypter notebook (as ipython) on CSV to generate graphs
 # TODO 3. Report some summary info
 
+echo Download Oakland COVID data as JSON
+./processDaily.sh oakland > oakland/daily_data.csv
 echo Download Alameda COVID data as JSON
-./alamedaDaily.sh > alameda_data.csv
+./processDaily.sh alameda > alameda/daily_data.csv
 echo Convert to CSV format
-ipython alameda_covid.py
+COVID_CITY=oakland ipython covid_notebook.py
+COVID_CITY=alameda ipython covid_notebook.py

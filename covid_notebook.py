@@ -7,20 +7,24 @@
 # 
 # TODO: Rename "I" to "Total Cases"
 
-# In[487]:
+# In[666]:
 
 import os
 
 #LOCAL_DATA_ROOT = "/Users/jason/development/cv19/"
+CITY = os.getenv('COVID_CITY', 'alameda')
+print('Parsing data from ' + CITY)
 LOCAL_DATA_ROOT = "./"
-CSV_FILE = "alameda_data.csv"
-CSV_OUTPUT_FILE = "alameda_delta_data.csv"
+CSV_FILE = "daily_data.csv"
+CSV_OUTPUT_FILE = "daily_delta_data.csv"
 
-CASES_PER_DAY_GRAPH_FILE = "alameda_daily_cases.png"
+CASES_PER_DAY_GRAPH_FILE = "daily_cases.png"
 
-CSV_PATH = os.path.join(LOCAL_DATA_ROOT, CSV_FILE)
-CSV_OUTPUT_PATH = os.path.join(LOCAL_DATA_ROOT, CSV_OUTPUT_FILE)
-CASES_PER_DAY_GRAPH_PATH = os.path.join(LOCAL_DATA_ROOT, CASES_PER_DAY_GRAPH_FILE)
+CSV_PATH = os.path.join(LOCAL_DATA_ROOT, CITY, CSV_FILE)
+CSV_OUTPUT_PATH = os.path.join(LOCAL_DATA_ROOT, CITY, CSV_OUTPUT_FILE)
+CASES_PER_DAY_GRAPH_PATH = os.path.join(LOCAL_DATA_ROOT, CITY, CASES_PER_DAY_GRAPH_FILE)
+
+print('Parsing data from file ' + CSV_PATH)
 
 get_ipython().magic(u'matplotlib auto')
 import pandas as pd
@@ -34,20 +38,20 @@ def load_covid_data(csv_path=CSV_PATH):
 
 
 
-# In[488]:
+# In[667]:
 
 covid = load_covid_data()
 covid.head()
 
 
-# In[489]:
+# In[668]:
 
 covid.info()
 
 
 # Clean up the data - replace NaN with 0; replace <10 with 0
 
-# In[490]:
+# In[669]:
 
 covid["Total"].fillna(0,inplace=True)
 covid["Total"].replace("<10", 0,inplace=True)
@@ -55,7 +59,7 @@ covid["Total"].replace("<10", 0,inplace=True)
 
 # Convert I field from an object (as it originally had strings) to an int
 
-# In[491]:
+# In[670]:
 
 covid["Total"] = covid["Total"].astype(str).astype(int)
 
@@ -65,7 +69,7 @@ covid["Total"] = covid["Total"].astype(str).astype(int)
 
 
 
-# In[492]:
+# In[671]:
 
 covid.info()
 
@@ -75,7 +79,7 @@ covid.info()
 
 
 
-# In[493]:
+# In[672]:
 
 covid.head()
 
@@ -85,7 +89,7 @@ covid.head()
 
 
 
-# In[494]:
+# In[673]:
 
 pd.set_option('display.max_rows', None)
 print(covid)
@@ -98,7 +102,7 @@ print(covid)
 
 # Work out the case delta between each row to generate a number of new cases per day as the second column
 
-# In[495]:
+# In[674]:
 
 test = covid["Total"]
 print(test)
@@ -112,14 +116,14 @@ print(test)
 # UNKNOWN: Why is diff on a specific row (or on test) not working?
 # The "I" column is an object, not an int - convert?
 
-# In[496]:
+# In[675]:
 
 test.diff()
 
 
 # Convert dates into standard pandas data format
 
-# In[497]:
+# In[676]:
 
 covid['std-date'] = pd.to_datetime(covid["dates"], format='%d/%m/%Y')
 print(covid)
@@ -133,12 +137,12 @@ covid.info()
 
 # Need to sort by incrementing dates
 
-# In[498]:
+# In[677]:
 
 covid = covid.sort_values(by='std-date',ascending=True) 
 
 
-# In[499]:
+# In[678]:
 
 print(covid)
 
@@ -151,24 +155,24 @@ print(covid)
 # Work out diffs; convert NaN to the original value and convert diff column to int
 # TODO: Move diff column to column two
 
-# In[500]:
+# In[679]:
 
 covid["I"] = covid["Total"].diff().fillna(covid['Total']).astype(int)
 
 
-# In[501]:
+# In[680]:
 
 print(covid)
 
 
-# In[502]:
+# In[681]:
 
 covid.info()
 
 
 # Swap cells to be in the correct organization for WHO-PAHO
 
-# In[503]:
+# In[682]:
 
 cols = list(covid.columns)
 a, b = cols.index('Total'), cols.index('I')
@@ -176,7 +180,7 @@ cols[b], cols[a] = cols[a], cols[b]
 covid = covid[cols]
 
 
-# In[504]:
+# In[683]:
 
 print(covid)
 
@@ -185,7 +189,7 @@ print(covid)
 # 
 # TODO: We currently do it from a known end point, but we should look for where I goes negative (or we transition to 0) and drop all after this point
 
-# In[505]:
+# In[684]:
 
 #covid = covid.loc[0:276]
 #print(covid)
@@ -198,12 +202,12 @@ print(covid)
 
 # Remove the std-date column from the dataframe we write as CSV as it confused WHO-PAHO
 
-# In[506]:
+# In[685]:
 
 csv_covid = covid.drop(['std-date'], axis=1)
 
 
-# In[507]:
+# In[686]:
 
 csv_covid.to_csv(CSV_OUTPUT_PATH, header=True, index=False) 
 
@@ -213,16 +217,16 @@ csv_covid.to_csv(CSV_OUTPUT_PATH, header=True, index=False)
 
 
 
-# Display Alameda covid cases over time
+# Display covid cases over time
 
-# In[508]:
+# In[691]:
 
-covid.plot(x="std-date", y="Total", title="Alameda Covid cumulative cases")
+covid.plot(x="std-date", y="Total", title=CITY + " Covid cumulative cases")
 
 
 # Show log y - change in growth over time
 
-# In[ ]:
+# In[688]:
 
 covid.plot(x="std-date", y="Total",logy=True)
 
@@ -232,9 +236,9 @@ covid.plot(x="std-date", y="Total",logy=True)
 
 
 
-# In[ ]:
+# In[689]:
 
-ax = covid.plot(x="std-date", y="I", kind="bar", figsize=(20,10), title="Alameda Covid cases per day")
+ax = covid.plot(x="std-date", y="I", kind="bar", figsize=(20,10), title=CITY + " Covid cases per day")
 
 n = 10
 
@@ -247,7 +251,7 @@ ax.figure.tight_layout()
 ax.figure.show()
 
 
-# In[ ]:
+# In[690]:
 
 ax.figure.savefig(CASES_PER_DAY_GRAPH_PATH)
 
