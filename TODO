@@ -1,0 +1,17 @@
+* Script to automate
+  *   Currently convert Juypter notebook -> (i)python. Should I rewrite as basic python
+* Display - create a webpage to visualize
+* Output more graphs
+* Can I add other cities?
+* Add to a Dashboard of my own - CV19 data, Air Quality monitoring, MT sensor data
+  * What's a good way to pull this all together?
+  * Juypter Voila ?
+*  https://jupyter.org/
+* Work out how to run Rt analysis
+* Reproducible install / execution
+  * via docker?
+  * Use python virtualenv
+* Upload to github
+* Show data in github?
+* Notebook should be able to take any JSON in correct format and generate parsed data as graphs
+  ... i.e. shouldn't have "Alameda" in it, unless passed as a parameter; perhaps write graphs to subdirectories
