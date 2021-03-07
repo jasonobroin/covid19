@@ -1,0 +1,38 @@
+<html>
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+     <title>Document</title>
+</head>
+<body>
+     {{ partial "header" (dict "Kind" .Kind "Template" "Data") }}
+
+
+     <div style="margin:25px;">
+          <h1>{{.Title}}</h1>
+          <div style="color:grey; font-size:16px;"> Last Update {{ dateFormat "Monday, Jan 2, 2006" .Date }}</div>
+          <div style="color:grey; font-size:16px;">{{if .Params.city}}City: {{.Params.Title}}{{end}}</div>
+          <div style="font-size:18px;">{{.Content}}</div>
+
+          Current Covid 19 graphs for {{.Params.Title}}<br>
+          
+          {{ $path := .Params.City }}
+
+          {{ $daily_case_path := "daily_cases.png" }}
+          {{ $cumulative_cases_path := "cumulative_cases.png" }}
+          {{ $cumulative_cases_log_path := "cumulative_cases_log.png" }}
+
+          {{ $daily_case := print "/" $path "/" $daily_case_path }}
+          {{ $cumulative_cases := print "/" $path "/" $cumulative_cases_path }}
+          {{ $cumulative_cases_log := print "/" $path "/" $cumulative_cases_log_path }}
+          
+          <div><a href="{{ $daily_case }}"><img src="{{ $daily_case }}" width=100% /></a></div>
+          <a href="{{ $cumulative_cases }}"><img src="{{ $cumulative_cases }}"/></a>
+          <a href="{{ $cumulative_cases_log }}"><img src="{{ $cumulative_cases_log }}"/></a>
+
+     </div>
+
+     {{ partial "footer" . }}
+</body>
+</html>

@@ -1,0 +1,8 @@
+<div style="height:35px;"></div>
+<div style=" position:fixed; color: white; height:35px; background-color:#757575; bottom:0px; text-align:center; width:99%">
+     <p style="margin:10px; "> 
+        {{if .Prev}}<a style="color: white; " href="{{.Prev.Permalink}}"> {{.Prev.Title}}</a> < {{end}}
+        <a style="color: white; " href="../"> UP</a>
+        {{if .Next}}<a style="color: white; " href="{{.Next.Permalink}}"> > {{.Next.Title}}</a>{{end}}    
+    </p>
+</div>
