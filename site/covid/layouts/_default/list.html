@@ -20,8 +20,18 @@
                <div style="color:grey; font-size:16px;">{{ if .Params.tags }}<strong>Tags:</strong> {{range .Params.tags}}<a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a> {{end}}{{end}}</div>
                <div style="color:grey; font-size:16px;">{{ if .Params.categories }}<strong>Categories:</strong> {{range .Params.categories}}<a href="{{ "/categories/" | relLangURL }}{{ . | urlize }}">{{ . }}</a> {{end}}{{end}}</div>
                <div style="color:grey; font-size:16px;">{{ if .Params.moods }}<strong>Moods:</strong> {{range .Params.moods}}<a href="{{ "/moods/" | relLangURL }}{{ . | urlize }}">{{ . }}</a> {{end}}{{end}}</div>
+              
               {{.Content}}
-              <div><a href="/{{.Params.City}}/daily_cases.png"><img src="/{{.Params.City}}/daily_cases.png" width=30% height=30% /></a></div>
+              
+              {{ $city := string .Params.City }}
+
+              <div> 
+                Current Total Covid cases in {{ $city }} : {{ (index .Site.Data $city).total_cases }}
+              </div>
+              <div>
+                  <a href="/{{$city}}/daily_cases.png"><img src="/{{$city}}/daily_cases.png" width=30% height=30% /></a>
+                  <a href="/{{$city}}/cumulative_cases.png"><img src="/{{$city}}/cumulative_cases.png" width=30% height=30% /></a>
+              </div>
 
                <p style="font-size:18px;">{{.Summary}}</p>
           </div>

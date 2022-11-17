@@ -17,21 +17,52 @@
 
           Current Covid 19 graphs for {{.Params.Title}}<br>
           
-          {{ $path := .Params.City }}
+          {{ $city := .Params.City }}
 
           {{ $daily_case_path := "daily_cases.png" }}
           {{ $cumulative_cases_path := "cumulative_cases.png" }}
           {{ $cumulative_cases_log_path := "cumulative_cases_log.png" }}
+          {{ $weekly_case_csv_path := "weekly_delta_data.csv" }}
 
-          {{ $daily_case := print "/" $path "/" $daily_case_path }}
-          {{ $cumulative_cases := print "/" $path "/" $cumulative_cases_path }}
-          {{ $cumulative_cases_log := print "/" $path "/" $cumulative_cases_log_path }}
+          {{ $daily_case := print "/" $city "/" $daily_case_path }}
+          {{ $cumulative_cases := print "/" $city "/" $cumulative_cases_path }}
+          {{ $cumulative_cases_log := print "/" $city "/" $cumulative_cases_log_path }}
+          {{ $weekly_case_csv := print "/static/" $city "/" "weekly_delta_data.csv" }}
+        
           
+          Current Total Covid cases in {{ .Params.Title }} : {{ (index .Site.Data $city).total_cases }}
+
+        
           <div><a href="{{ $daily_case }}"><img src="{{ $daily_case }}" width=100% /></a></div>
-          <a href="{{ $cumulative_cases }}"><img src="{{ $cumulative_cases }}"/></a>
-          <a href="{{ $cumulative_cases_log }}"><img src="{{ $cumulative_cases_log }}"/></a>
+          <div><a href="{{ $cumulative_cases }}"><img src="{{ $cumulative_cases }}" width=40%/></a>
+          <a href="{{ $cumulative_cases_log }}"><img src="{{ $cumulative_cases_log }}" width=40%/></a></div>
+
 
      </div>
+
+     <div>
+   <table>
+      <thead>
+        <tr>
+        <th>Date</th>
+        <th>New cases</th>
+        <th>Total cases</th>
+        </tr>
+      </thead>
+      <tbody>
+          {{ $url := $weekly_case_csv }}
+          {{ $sep := "," }}
+          {{ range $i, $r := getCSV $sep $url }}
+            <tr>
+                <td>{{ index $r 0 }}</td>
+                <td>{{ index $r 1 }}</td>
+                <td>{{ index $r 2 }}</td>
+            </tr>
+            <br>
+          {{ end }}
+      </tend>
+    </table>
+    </div>
 
      {{ partial "footer" . }}
 </body>

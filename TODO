@@ -1,3 +1,9 @@
+* Hugo
+  * Report current total per city
+  * Change since last day 
+  * How we can update the 'last updated' date - we need to get date from one of the generated files, or update the front matter some how
+  * Turn last week numbers into a partial
+
 * Script to automate
   *   Currently convert Juypter notebook -> (i)python. Should I rewrite as basic python
 * Display - create a webpage to visualize
